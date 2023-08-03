@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Áudio com Mouseover</title>
+    <style>
+        #cta-button:focus,
+        #submit-button:focus {
+            outline: none;
+            border: 2px solid #003366;
+        }
+
+        .accessibility-buttons {
+            margin-top: 10px;
+        }
+
+        .accessibility-button {
+            background-color: #003366;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .accessibility-button:hover {
+            background-color: #002855;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Página com Acessibilidade</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#" aria-label="Página inicial">Início</a></li>
+            <li><a href="#" aria-label="Sobre nós">Sobre</a></li>
+            <li><a href="#" aria-label="Nossos serviços">Serviços</a></li>
+            <li><a href="#" aria-label="Entre em contato">Contato</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Bem-vindo ao nosso site!</h2>
+        <p>Ao passar o mouse aqui você escutará um som misterioso.</p>
+        <button id="cta-button" aria-label="Clique para ouvir um som"
+            onmouseover="playSound('Teste.mp3', 'audio')">Clique aqui</button>
+
+        <h2>Acessibilidade em Foco é um termo que se refere à importância de garantir o acesso de todas as pessoas,
+            especialmente as com deficiência, aos espaços e serviços da sociedade12. A acessibilidade envolve aspectos
+            físicos, culturais, educacionais, relacionais e comportamentais1. Acessibilidade em Foco também é o nome de
+            um site que oferece conteúdos acessíveis, como programas, jogos, tutoriais, aplicativos, áudio e vídeo, para
+            pessoas com deficiência2.</h2>
+
+        <img
+            src="https://www.diocesesaocarlos.org.br/wp-content/uploads/2019/02/23-11-2015-logo-lei-da-incluso-png.png">
+
+        <form>
+
+    </main>
+
+    <footer>
+        <p>&copy; Feito por Jhonatan</p>
+    </footer>
+
+    <audio id="audio" preload="auto">
+        <source src="Teste.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <audio id="audio2" preload="auto">
+        <source src="Jovens.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <div class="accessibility-buttons">
+        <button class="accessibility-button" id="increase-font-button" aria-label="Aumentar Fonte">Aumentar
+            Fonte</button>
+        <button class="accessibility-button" id="change-font-button" aria-label="Alterar Fonte">Alterar Fonte</button>
+        <button class="accessibility-button" id="reset-font-button" aria-label="Redefinir Fonte">Redefinir
+            Fonte</button>
+    </div>
+
+    <script>
+        let currentPlayingAudio = null;
+
+        function playSound(audioSource, audioElementId) {
+            if (currentPlayingAudio) {
+                currentPlayingAudio.pause();
+                currentPlayingAudio.currentTime = 0;
+            }
+            const audioElement = document.getElementById(audioElementId);
+            audioElement.src = audioSource;
+            audioElement.play();
+            currentPlayingAudio = audioElement;
+        }
+
+        const soundButton = document.getElementById('cta-button');
+        const increaseFontButton = document.getElementById('increase-font-button');
+        const changeFontButton = document.getElementById('change-font-button');
+        const resetFontButton = document.getElementById('reset-font-button');
+        const mainContent = document.querySelector('main');
+        const defaultFontSize = getComputedStyle(mainContent).fontSize;
+        let fontIndex = 0;
+        const fontFamilies = ['Arial, sans-serif', 'Times New Roman, serif', 'Verdana, sans-serif'];
+
+        soundButton.addEventListener('mouseout', () => {
+            if (currentPlayingAudio === document.getElementById('audio')) {
+                currentPlayingAudio.pause();
+                currentPlayingAudio.currentTime = 0;
+            }
+        });
+
+        increaseFontButton.addEventListener('click', () => {
+            const computedStyle = getComputedStyle(mainContent);
+            const currentFontSize = parseInt(computedStyle.fontSize);
+            mainContent.style.fontSize = (currentFontSize + 2) + 'px';
+        });
+
+        changeFontButton.addEventListener('click', () => {
+            fontIndex = (fontIndex + 1) % fontFamilies.length;
+            mainContent.style.fontFamily = fontFamilies[fontIndex];
+        });
+
+        resetFontButton.addEventListener('click', () => {
+            mainContent.style.fontSize = defaultFontSize;
+            mainContent.style.fontFamily = 'Arial, sans-serif';
+            fontIndex = 0;
+        });
+    </script>
+</body>
+
+</html>
